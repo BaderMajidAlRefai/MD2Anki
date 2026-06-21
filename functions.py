@@ -1,7 +1,7 @@
 import re
 
 def extract_cards(md):
-    pattern = "\*\*(.*?)\*\*:\s(.*)"
+    pattern = r"\*\*(.*?)\*\*:\s(.*)"
     questions = []
 
     for line in md:
@@ -10,9 +10,6 @@ def extract_cards(md):
             questions.append(extracted_line.groups())
 
     return questions
-
-with open("test.md", "r") as md:
-    print(extract_cards(md))
 
 def csv_conversion(cards_dict):
     return
