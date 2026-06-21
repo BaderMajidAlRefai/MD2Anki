@@ -15,5 +15,4 @@ def csv_conversion(cards_array):
     with open('cards.csv', 'w') as file:
         for question, answer in cards_array:
             file.write(f"{question}, {answer}\n")
-            
-    return
+    return 0
