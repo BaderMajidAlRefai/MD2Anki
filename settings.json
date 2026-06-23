@@ -6,5 +6,6 @@
 
     },
     "anki": {
+        "anki_connect_port" : "http://localhost:8765"
     }
 }
