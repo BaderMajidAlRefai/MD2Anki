@@ -1,6 +1,4 @@
 {
-    "settings": {
-        "obsidian_root": "",
-        "card_pattern": ""
-    }
+    "obsidian_root" : "",
+    "notes_pattern" : ""
 }
