@@ -1,10 +1,10 @@
 import re
 
-def extract_cards(md):
-    pattern = r"\s?-?\s?\*\*(.*?):\*\*\s(\S.*)"
+def extract_cards(md, settings):
+    pattern = settings["notes_pattern"]
     questions = []
 
-    for line in md:
+    for line in md: 
         extracted_line = re.match(pattern, line)
         if extracted_line:
             questions.append(extracted_line.groups())

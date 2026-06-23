@@ -1,4 +1,4 @@
 {
     "obsidian_root" : "",
-    "notes_pattern" : ""
+    "notes_pattern" : "\\s?-?\\s?\\*\\*(.*?):\\*\\*\\s(\\S.*)"
 }
