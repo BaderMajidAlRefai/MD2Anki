@@ -1,7 +1,7 @@
 import re
 
 def extract_cards(md):
-    pattern = r"\s?-?\s?\*\*(.*?):\*\*\s(.*)"
+    pattern = r"\s?-?\s?\*\*(.*?):\*\*\s(\S.*)"
     questions = []
 
     for line in md:
