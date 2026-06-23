@@ -1,7 +1,7 @@
 import re
 
 def extract_cards(md, settings):
-    pattern = settings["notes_pattern"]
+    pattern = settings["obsidian"]["notes_pattern"]
     questions = []
 
     for line in md: 

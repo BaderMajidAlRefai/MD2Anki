@@ -1,4 +1,10 @@
 {
-    "obsidian_root" : "",
-    "notes_pattern" : "\\s?-?\\s?\\*\\*(.*?):\\*\\*\\s(\\S.*)"
+    "obsidian": {
+        "obsidian_root" : "",
+        "deck_type" : "",
+        "notes_pattern" : "\\s?-?\\s?\\*\\*(.*?):\\*\\*\\s(\\S.*)"
+
+    },
+    "anki": {
+    }
 }
