@@ -8,4 +8,4 @@ with open("settings.json", "r") as settings_file:
 with open("test.md", "r") as md:
     csv_conversion(extract_cards(md, settings))
 
-print(get_anki_state(settings["anki"]["anki_connect_port"]))
+print(sync_to_anki(settings["anki"]["anki_connect_port"]))

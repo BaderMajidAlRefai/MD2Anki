@@ -1,7 +1,20 @@
 import requests
-def sync_to_anki():
+def sync_to_anki(anki_port):
+    if error := check_anki_connect(anki_port):
+        return error
+    anki_state = get_anki_state(anki_port)
+    print(anki_state)
 
-    return 
+def check_anki_connect(anki_port):
+    try:
+        requests.post(anki_port)
+        return None
+    except Exception:
+        return ("""ERROR: Anki connect is not found or not responding.
+                      \nPotential Issues: 
+                      \nAnki is not open. 
+                      \nYou do not have anki connect installed. 
+                      \nSomething is wrong with anki connect.""")
 
 def get_current_anki_decks(anki_port):
     current_anki_decks = requests.post(
