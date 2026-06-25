@@ -2,8 +2,11 @@ import requests
 def sync_to_anki(anki_port):
     if error := check_anki_connect(anki_port):
         return error
-    anki_state = get_anki_state(anki_port)
-    print(anki_state)
+    
+    try:
+        anki_state = get_anki_state(anki_port)
+    except Exception as e: 
+        return f"ERROR: {e}"
 
 def check_anki_connect(anki_port):
     try:
@@ -11,10 +14,10 @@ def check_anki_connect(anki_port):
         return None
     except Exception:
         return ("""ERROR: Anki connect is not found or not responding.
-                      \nPotential Issues: 
-                      \nAnki is not open. 
-                      \nYou do not have anki connect installed. 
-                      \nSomething is wrong with anki connect.""")
+                      \n- Potential Issues: 
+                      \n- Anki is not open. 
+                      \n- You do not have anki connect installed. 
+                      \n- Something is wrong with anki connect.""")
 
 def get_current_anki_decks(anki_port):
     current_anki_decks = requests.post(
@@ -85,7 +88,7 @@ def get_anki_state(anki_port):
         cards = get_cards(anki_port, deck)
         cards_details = get_cards_details(anki_port, cards)
         add_cards_to_anki_state(anki_state, deck, cards_details)
-        
+    
     return anki_state
 
 def get_obsidian_state():
