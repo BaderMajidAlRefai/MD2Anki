@@ -5,7 +5,4 @@ from sync import *
 with open("settings.json", "r") as settings_file:
     settings = json.load(settings_file)
 
-with open("test.md", "r") as md:
-    csv_conversion(extract_cards(md, settings))
-
-print(sync_to_anki(settings["anki"]["anki_connect_port"]))
+print(get_obsidian_state(settings["obsidian"]["obsidian_root"], settings["obsidian"]["deck_type"]))

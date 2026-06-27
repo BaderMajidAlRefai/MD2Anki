@@ -1,4 +1,7 @@
+from os import wait
+
 import requests
+from pathlib import Path
 def sync_to_anki(anki_port):
     if error := check_anki_connect(anki_port):
         return error
@@ -91,5 +94,9 @@ def get_anki_state(anki_port):
     
     return anki_state
 
-def get_obsidian_state():
-    return
+def get_obsidian_state(root_path, deck_type):
+    obsidian_root = Path(root_path).expanduser()
+    subdirectories = obsidian_root.iterdir()
+    for item in subdirectories:
+        print(item)
+    return 

@@ -1,7 +1,7 @@
 {
     "obsidian": {
-        "obsidian_root" : "",
-        "deck_type" : "",
+        "obsidian_root" : "~/Documents/Just a Vault/test root/",
+        "deck_type" : "folder",
         "notes_pattern" : "\\s?-?\\s?\\*\\*(.*?):\\*\\*\\s(\\S.*)"
 
     },
