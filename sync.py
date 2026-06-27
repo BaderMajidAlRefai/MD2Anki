@@ -1,5 +1,3 @@
-from os import wait
-
 import requests
 from pathlib import Path
 def sync_to_anki(anki_port):
