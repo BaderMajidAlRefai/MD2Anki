@@ -1,11 +1,16 @@
+from os.path import isdir
+
 import requests
+import parsing
+
 from pathlib import Path
 def sync_to_anki(anki_port):
     if error := check_anki_connect(anki_port):
         return error
     
     try:
-        anki_state = get_anki_state(anki_port)
+        get_anki_state(anki_port)
+
     except Exception as e: 
         return f"ERROR: {e}"
 
@@ -92,9 +97,17 @@ def get_anki_state(anki_port):
     
     return anki_state
 
-def get_obsidian_state(root_path, deck_type):
+def get_obsidian_state(root_path, settings):
+    obsidian_state = {}
     obsidian_root = Path(root_path).expanduser()
-    subdirectories = obsidian_root.iterdir()
-    for item in subdirectories:
-        print(item)
-    return 
+
+    for sub_directory in obsidian_root.iterdir():
+        if sub_directory.is_dir():
+            obsidian_state[sub_directory.name] = []
+            for file in sub_directory.iterdir():
+                if file.is_file():
+                    with open(file, 'r') as md:
+                        extracted_cards = parsing.extract_cards(md, settings)
+                        obsidian_state[sub_directory.name].extend(extracted_cards)
+
+    return obsidian_state 
