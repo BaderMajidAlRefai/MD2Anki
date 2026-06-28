@@ -42,10 +42,7 @@ def setup_anki_state(current_anki_decks):
     anki_state = {}
 
     for deck_name, deck_id in current_anki_decks.items():
-        anki_state[deck_name] = {
-            "id" : deck_id,
-            "cards" : {}
-        }
+        anki_state[deck_name] = []
 
     return anki_state
 
@@ -80,11 +77,9 @@ def get_cards_details(anki_port, cards):
 
 def add_cards_to_anki_state(anki_state, deck, cards_details):
     for details in cards_details:
-        card_id = details["cardId"]
-        anki_state[deck]["cards"][card_id] = {
-            "front_side" : details["fields"]["Front"],
-            "back_side" : details["fields"]["Back"]
-        }
+        anki_state[deck].append(
+            (details["fields"]["Front"], details["fields"]["Back"])
+        )
 
 def get_anki_state(anki_port):
     current_anki_decks = get_current_anki_decks(anki_port)
@@ -111,3 +106,11 @@ def get_obsidian_state(root_path, settings):
                         obsidian_state[sub_directory.name].extend(extracted_cards)
 
     return obsidian_state
+
+def create_plan():
+    return 
+
+def compare_cards(anki_state, obsidian_state):
+    for deck in obsidian_state:
+        anki_state.get(deck)
+    return
