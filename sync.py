@@ -110,4 +110,4 @@ def get_obsidian_state(root_path, settings):
                         extracted_cards = parsing.extract_cards(md, settings)
                         obsidian_state[sub_directory.name].extend(extracted_cards)
 
-    return obsidian_state 
+    return obsidian_state
