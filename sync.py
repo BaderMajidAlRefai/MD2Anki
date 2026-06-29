@@ -107,10 +107,30 @@ def get_obsidian_state(root_path, settings):
 
     return obsidian_state
 
-def create_plan():
+def create_plan(anki_state, obsidian_state):
+    deck_plan = comparing_decks(anki_state,obsidian_state)
+    card_plan = comparing_cards(anki_state,obsidian_state)
     return 
 
-def compare_cards(anki_state, obsidian_state):
-    for deck in obsidian_state:
-        anki_state.get(deck)
-    return
+def comparing_decks(anki_state, obsidian_state):
+    deck_plan = {}
+
+    existing_decks = [deck for deck in obsidian_state if deck in anki_state]
+    new_decks = [deck for deck in obsidian_state if deck not in anki_state]
+
+    deck_plan["existing_decks"] = existing_decks
+    deck_plan["new_decks"] = new_decks
+    return deck_plan
+
+def comparing_cards(anki_state,obsidian_state):
+    card_plan = {}
+    
+    for obsidian_deck in obsidian_state:
+        anki_cards = anki_state.get(obsidian_deck)  # TODO: anki_cards may be None for new decks → TypeError on lines below
+        obsidian_cards = obsidian_state[obsidian_deck]
+
+        new_cards = [card for card in obsidian_cards if card not in anki_cards]
+        to_be_deleted = [card for card in anki_cards if card not in obsidian_cards]
+
+        card_plan[obsidian_deck] = {"new_cards" : new_cards, "to_be_deleted" : to_be_deleted}
+    return card_plan
