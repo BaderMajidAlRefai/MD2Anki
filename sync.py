@@ -126,7 +126,10 @@ def comparing_cards(anki_state,obsidian_state):
     card_plan = {}
     
     for obsidian_deck in obsidian_state:
-        anki_cards = anki_state.get(obsidian_deck)  # TODO: anki_cards may be None for new decks → TypeError on lines below
+        if anki_state.get(obsidian_deck):
+            anki_cards = anki_state.get(obsidian_deck)
+        else:
+            anki_cards = []
         obsidian_cards = obsidian_state[obsidian_deck]
 
         new_cards = [card for card in obsidian_cards if card not in anki_cards]
