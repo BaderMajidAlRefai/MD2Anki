@@ -2,8 +2,8 @@ from os.path import isdir
 
 import requests
 import parsing
-
 from pathlib import Path
+
 def sync_to_anki(anki_port):
     if error := check_anki_connect(anki_port):
         return error
@@ -110,7 +110,28 @@ def get_obsidian_state(root_path, settings):
 def create_plan(anki_state, obsidian_state):
     deck_plan = comparing_decks(anki_state,obsidian_state)
     card_plan = comparing_cards(anki_state,obsidian_state)
-    return 
+    master_plan = {}
+    master_plan["deck_plan"] = deck_plan
+    master_plan["card_plan"] = card_plan
+    return master_plan
+
+def display_plan(plan):
+    text = ""
+    if plan["deck_plan"]["new_decks"]:
+        text += f"Decks to be added: {len(plan["deck_plan"]["new_decks"])}.\n"
+        for deck in plan["deck_plan"]["new_decks"]:
+            text += f"{deck} \n"
+    text += f"Existing Decks: {len(plan["deck_plan"]["existing_decks"])}\n"
+    for deck in plan["deck_plan"]["existing_decks"]:
+        text += f"{deck} \n"
+    for deck in plan["card_plan"]:
+        text += f"Cards being added to {deck}: {len(plan['card_plan'][deck]['new_cards'])}\n"
+        for card in plan["card_plan"][deck]["new_cards"]:
+            text += f"{card[0]}: {card[1]} \n"
+        text += f"Cards being deleted from {deck}: {len(plan['card_plan'][deck]['to_be_deleted'])}\n"
+        for card in plan["card_plan"][deck]["to_be_deleted"]:
+            text += f"{card[0]}: {card[1]}\n"
+    return text
 
 def comparing_decks(anki_state, obsidian_state):
     deck_plan = {}
@@ -129,7 +150,7 @@ def comparing_cards(anki_state,obsidian_state):
         if anki_state.get(obsidian_deck):
             anki_cards = anki_state.get(obsidian_deck)
         else:
-            anki_cards = []
+            anki_cards =  []
         obsidian_cards = obsidian_state[obsidian_deck]
 
         new_cards = [card for card in obsidian_cards if card not in anki_cards]
