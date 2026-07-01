@@ -115,24 +115,6 @@ def create_plan(anki_state, obsidian_state):
     master_plan["card_plan"] = card_plan
     return master_plan
 
-def display_plan(plan):
-    text = ""
-    if plan["deck_plan"]["new_decks"]:
-        text += f"Decks to be added: {len(plan["deck_plan"]["new_decks"])}.\n"
-        for deck in plan["deck_plan"]["new_decks"]:
-            text += f"{deck} \n"
-    text += f"Existing Decks: {len(plan["deck_plan"]["existing_decks"])}\n"
-    for deck in plan["deck_plan"]["existing_decks"]:
-        text += f"{deck} \n"
-    for deck in plan["card_plan"]:
-        text += f"Cards being added to {deck}: {len(plan['card_plan'][deck]['new_cards'])}\n"
-        for card in plan["card_plan"][deck]["new_cards"]:
-            text += f"{card[0]}: {card[1]} \n"
-        text += f"Cards being deleted from {deck}: {len(plan['card_plan'][deck]['to_be_deleted'])}\n"
-        for card in plan["card_plan"][deck]["to_be_deleted"]:
-            text += f"{card[0]}: {card[1]}\n"
-    return text
-
 def comparing_decks(anki_state, obsidian_state):
     deck_plan = {}
 
@@ -158,3 +140,21 @@ def comparing_cards(anki_state,obsidian_state):
 
         card_plan[obsidian_deck] = {"new_cards" : new_cards, "to_be_deleted" : to_be_deleted}
     return card_plan
+
+def display_plan(plan):
+    text = ""
+    if plan["deck_plan"]["new_decks"]:
+        text += f"Decks to be added: {len(plan["deck_plan"]["new_decks"])}.\n"
+        for deck in plan["deck_plan"]["new_decks"]:
+            text += f"{deck} \n"
+    text += f"Existing Decks: {len(plan["deck_plan"]["existing_decks"])}\n"
+    for deck in plan["deck_plan"]["existing_decks"]:
+        text += f"{deck} \n"
+    for deck in plan["card_plan"]:
+        text += f"Cards being added to {deck}: {len(plan['card_plan'][deck]['new_cards'])}\n"
+        for card in plan["card_plan"][deck]["new_cards"]:
+            text += f"{card[0]}: {card[1]} \n"
+        text += f"Cards being deleted from {deck}: {len(plan['card_plan'][deck]['to_be_deleted'])}\n"
+        for card in plan["card_plan"][deck]["to_be_deleted"]:
+            text += f"{card[0]}: {card[1]}\n"
+    return text
