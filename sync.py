@@ -10,10 +10,10 @@ def check_anki_connect(anki_port):
         return None
     except Exception:
         return ("""ERROR: Anki connect is not found or not responding.
-                      \n- Potential Issues: 
-                      \n- Anki is not open. 
-                      \n- You do not have anki connect installed. 
-                      \n- Something is wrong with anki connect.""")
+                \n- Potential Issues: 
+                \n- Anki is not open. 
+                \n- You do not have anki connect installed. 
+                \n- Something is wrong with anki connect.""")
 
 def get_current_anki_decks(anki_port):
     current_anki_decks = requests.post(
@@ -134,10 +134,10 @@ def comparing_cards(anki_state,obsidian_state):
 def display_plan(plan):
     text = ""
     if plan["deck_plan"]["new_decks"]:
-        text += f"Decks to be added: {len(plan["deck_plan"]["new_decks"])}.\n"
+        text += f"Decks to be added: {len(plan['deck_plan']['new_decks'])}.\n"
         for deck in plan["deck_plan"]["new_decks"]:
             text += f"{deck} \n"
-    text += f"Existing Decks: {len(plan["deck_plan"]["existing_decks"])}\n"
+    text += f"Existing Decks: {len(plan['deck_plan']['existing_decks'])}\n"
     for deck in plan["deck_plan"]["existing_decks"]:
         text += f"{deck} \n"
     for deck in plan["card_plan"]:
@@ -145,7 +145,7 @@ def display_plan(plan):
         for card in plan["card_plan"][deck]["new_cards"]:
             text += f"{card[0]}: {card[1]} \n"
         text += f"Cards being deleted from {deck}: {len(plan['card_plan'][deck]['to_be_deleted'])}\n"
-        for card in plan["card_plan"][deck]["to_be_deleted"]:
+        for card in plan["card_plan"][deck]['to_be_deleted']:
             text += f"{card[0]}: {card[1]}\n"
     return text
 
@@ -158,7 +158,7 @@ def execute_plan(plan, anki_port):
                     "params" : {"deck" : deck}
                       })
     for deck in plan["card_plan"]:
-        for front, back in deck:
+        for front, back in plan["card_plan"][deck]["new_cards"]:
             requests.post(anki_port,
                           json={
                               "action" : "addNote",
@@ -168,8 +168,8 @@ def execute_plan(plan, anki_port):
                                       "deckName" : deck,
                                       "modelName" : "basic",
                                       "fields" : {
-                                          "front" : front,
-                                          "back" : back
+                                          "Front" : front,
+                                          "Back" : back
                                           }
                                       }
                                   }
