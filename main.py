@@ -1,5 +1,5 @@
 import json
-from parsing import csv_conversion, extract_cards
+from parsing import extract_cards
 from sync import *
 
 with open("settings.json", "r") as settings_file:
