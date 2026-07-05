@@ -149,6 +149,30 @@ def display_plan(plan):
             text += f"{card[0]}: {card[1]}\n"
     return text
 
-def execute_plan(plan):
+def execute_plan(plan, anki_port):
     for deck in plan["deck_plan"]["new_decks"]:
-        requests.post
+        requests.post(anki_port,
+                json={
+                    "action" : "createDeck",
+                    "version" : 6,
+                    "params" : {"deck" : deck}
+                      })
+    for deck in plan["card_plan"]:
+        for front, back in deck:
+            requests.post(anki_port,
+                          json={
+                              "action" : "addNote",
+                              "version" : 6,
+                              "params" : {
+                                  "note" : {
+                                      "deckName" : deck,
+                                      "modelName" : "basic",
+                                      "fields" : {
+                                          "front" : front,
+                                          "back" : back
+                                          }
+                                      }
+                                  }
+                              })
+
+
