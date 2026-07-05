@@ -4,16 +4,6 @@ import requests
 import parsing
 from pathlib import Path
 
-def sync_to_anki(anki_port):
-    if error := check_anki_connect(anki_port):
-        return error
-    
-    try:
-        get_anki_state(anki_port)
-
-    except Exception as e: 
-        return f"ERROR: {e}"
-
 def check_anki_connect(anki_port):
     try:
         requests.post(anki_port)
@@ -158,3 +148,7 @@ def display_plan(plan):
         for card in plan["card_plan"][deck]["to_be_deleted"]:
             text += f"{card[0]}: {card[1]}\n"
     return text
+
+def execute_plan(plan):
+    for deck in plan["deck_plan"]["new_decks"]:
+        requests.post
