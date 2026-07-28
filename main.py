@@ -1,19 +1,42 @@
 import json
+
 from parsing import extract_cards
-from sync import *
+from sync import (
+    anki_connected,
+    create_plan,
+    display_plan,
+    execute_plan,
+    get_anki_state,
+    get_obsidian_state,
+)
 
-with open("settings.json", "r") as settings_file:
-    settings = json.load(settings_file)
+def main():
+    with open("settings.json", "r") as settings_file:
+        settings = json.load(settings_file)
 
-print(check_anki_connect(settings["anki"]["anki_connect_port"]))
-plan = create_plan(
-        get_anki_state(settings["anki"]["anki_connect_port"]),
-        get_obsidian_state(settings["obsidian"]["obsidian_root"], settings)
-        )
-print(display_plan(plan))
+    anki_port = settings["anki"]["anki_connect_port"]
+    obsidian_root = settings["obsidian"]["obsidian_root"]
+
+    if anki_connected() == 0:
+        return "Failed. Please ensure you have Anki open or have the Anki connect extension installed."
+    else:
+        0
+
+    anki_state = get_anki_state(anki_port)
+    obsidian_state = get_obsidian_state(
+        obsidian_root,
+        settings
+    )
+
+    plan = create_plan(
+        anki_state,
+        obsidian_state
+    )
+
+    print(display_plan(plan))
+
+    execute_plan(plan, anki_port)
 
 
-
-execute_plan(plan, settings["anki"]["anki_connect_port"])
-
-
+if __name__ == "__main__":
+    main()

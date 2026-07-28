@@ -4,16 +4,12 @@ import requests
 import parsing
 from pathlib import Path
 
-def check_anki_connect(anki_port):
+def anki_connected(anki_port):
     try:
         requests.post(anki_port)
-        return None
-    except Exception:
-        return ("""ERROR: Anki connect is not found or not responding.
-                \n- Potential Issues: 
-                \n- Anki is not open. 
-                \n- You do not have anki connect installed. 
-                \n- Something is wrong with anki connect.""")
+        return True
+    except any:
+        return False
 
 def get_current_anki_decks(anki_port):
     current_anki_decks = requests.post(
