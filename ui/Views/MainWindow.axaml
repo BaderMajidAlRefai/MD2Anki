@@ -1,0 +1,203 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ui.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignWidth="560"
+        d:DesignHeight="720"
+        x:Class="ui.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="MD2Anki"
+        Width="560"
+        Height="720"
+        MinWidth="480"
+        MinHeight="620"
+        Background="#0F1117"
+        FontFamily="Inter">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <Style Selector="Button.primary">
+            <Setter Property="Height" Value="50" />
+            <Setter Property="MinHeight" Value="50" />
+            <Setter Property="MaxHeight" Value="50" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="18,0" />
+            <Setter Property="Background" Value="#7C5CFC" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#8B70FF" />
+        </Style>
+
+        <Style Selector="Button.secondary">
+            <Setter Property="Height" Value="50" />
+            <Setter Property="MinHeight" Value="50" />
+            <Setter Property="MaxHeight" Value="50" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="18,0" />
+            <Setter Property="Background" Value="#191C25" />
+            <Setter Property="Foreground" Value="#E8E9ED" />
+            <Setter Property="BorderBrush" Value="#2A2E3A" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style Selector="Button.secondary:pointerover">
+            <Setter Property="Background" Value="#202430" />
+            <Setter Property="BorderBrush" Value="#3C4150" />
+        </Style>
+
+        <Style Selector="Button.icon">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="MinWidth" Value="40" />
+            <Setter Property="MinHeight" Value="40" />
+            <Setter Property="MaxWidth" Value="40" />
+            <Setter Property="MaxHeight" Value="40" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="#191C25" />
+            <Setter Property="Foreground" Value="#C7CAD1" />
+            <Setter Property="BorderBrush" Value="#2A2E3A" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="20" />
+        </Style>
+
+        <Style Selector="Button.icon:pointerover">
+            <Setter Property="Background" Value="#242834" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <Border Grid.Row="0"
+                Padding="28,22"
+                Background="#12141B"
+                BorderBrush="#242731"
+                BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel
+                            VerticalAlignment="Center"
+                            Spacing="1">
+                    <TextBlock Text="MD2Anki"
+                               Foreground="#F4F4F6"
+                               FontSize="18"
+                               FontWeight="SemiBold" />
+                    <TextBlock Text="Obsidian flashcard sync"
+                               Foreground="#858A98"
+                               FontSize="12" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Classes="icon"
+                        Content="⚙"
+                        ToolTip.Tip="Settings" />
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="38,36,38,30"
+                        MaxWidth="720"
+                        HorizontalAlignment="Stretch"
+                        Spacing="24">
+                <Border Padding="22"
+                        Background="#171A22"
+                        BorderBrush="#292D38"
+                        BorderThickness="1"
+                        CornerRadius="14">
+                    <StackPanel Spacing="18">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Border Width="12"
+                                    Height="12"
+                                    Background="#4ADE80"
+                                    CornerRadius="6"
+                                    VerticalAlignment="Center" />
+                            <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="2">
+                                <TextBlock Text="Systems connected"
+                                           Foreground="#ECEDEF"
+                                           FontSize="15"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="Obsidian and Anki are available"
+                                           Foreground="#858A98"
+                                           FontSize="12" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="2"
+                                       Text="READY"
+                                       Foreground="#69E599"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Border Height="1" Background="#292D38" />
+
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                            <TextBlock Text="Obsidian vault"
+                                       Foreground="#A9ADB7"
+                                       FontSize="13" />
+                            <TextBlock Grid.Column="1"
+                                       Text="Connected"
+                                       Foreground="#E3E4E8"
+                                       FontSize="13" />
+                            <TextBlock Grid.Row="1"
+                                       Margin="0,11,0,0"
+                                       Text="AnkiConnect"
+                                       Foreground="#A9ADB7"
+                                       FontSize="13" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="1"
+                                       Margin="0,11,0,0"
+                                       Text="Connected"
+                                       Foreground="#E3E4E8"
+                                       FontSize="13" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Spacing="11">
+                    <Button Classes="primary" Content="Review and sync" />
+                    <Button Classes="secondary" Content="Quick sync" />
+                    <TextBlock Text="Quick sync applies changes without showing a preview."
+                               Foreground="#707582"
+                               FontSize="11"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2"
+                Padding="28,16"
+                Background="#12141B"
+                BorderBrush="#242731"
+                BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Last sync: Not yet synced"
+                           Foreground="#777C89"
+                           FontSize="12" />
+                <TextBlock Grid.Column="1"
+                           Text="v0.1"
+                           Foreground="#5F6470"
+                           FontSize="12" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
