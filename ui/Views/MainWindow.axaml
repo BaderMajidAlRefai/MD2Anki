@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:ui.ViewModels"
+        xmlns:views="using:ui.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
@@ -8,17 +9,56 @@
         d:DesignHeight="720"
         x:Class="ui.Views.MainWindow"
         x:DataType="vm:MainViewModel"
-        Title="MD2Anki"
-        Width="560"
-        Height="720"
+        Title="Obsidian2Anki"
+        Width="540"
+        Height="640"
         MinWidth="480"
-        MinHeight="620"
-        Background="#0F1117"
+        MinHeight="560"
+        Background="#151618"
         FontFamily="Inter">
 
     <Design.DataContext>
         <vm:MainViewModel />
     </Design.DataContext>
+
+    <Window.Resources>
+        <ControlTheme x:Key="SelectionToggleTheme" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <Viewbox Width="10"
+                                 Height="10"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                            <Path Data="M 1,5 L 4,8 L 10,1"
+                                  Stroke="{TemplateBinding Foreground}"
+                                  StrokeThickness="2"
+                                  StrokeLineCap="Round"
+                                  StrokeJoin="Round" />
+                        </Viewbox>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </ControlTheme>
+
+        <ControlTheme x:Key="DisclosureToggleTheme" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </ControlTheme>
+    </Window.Resources>
 
     <Window.Styles>
         <Style Selector="Button">
@@ -28,41 +68,41 @@
         </Style>
 
         <Style Selector="Button.primary">
-            <Setter Property="Height" Value="50" />
-            <Setter Property="MinHeight" Value="50" />
-            <Setter Property="MaxHeight" Value="50" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="MinHeight" Value="44" />
+            <Setter Property="MaxHeight" Value="44" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="Padding" Value="18,0" />
-            <Setter Property="Background" Value="#7C5CFC" />
-            <Setter Property="Foreground" Value="White" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Padding" Value="16,0" />
+            <Setter Property="Background" Value="#E5E7EB" />
+            <Setter Property="Foreground" Value="#17181A" />
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontSize" Value="14" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
 
         <Style Selector="Button.primary:pointerover">
-            <Setter Property="Background" Value="#8B70FF" />
+            <Setter Property="Background" Value="#FFFFFF" />
         </Style>
 
         <Style Selector="Button.secondary">
-            <Setter Property="Height" Value="50" />
-            <Setter Property="MinHeight" Value="50" />
-            <Setter Property="MaxHeight" Value="50" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="MinHeight" Value="44" />
+            <Setter Property="MaxHeight" Value="44" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="Padding" Value="18,0" />
-            <Setter Property="Background" Value="#191C25" />
-            <Setter Property="Foreground" Value="#E8E9ED" />
-            <Setter Property="BorderBrush" Value="#2A2E3A" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Padding" Value="16,0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#D3D5D9" />
+            <Setter Property="BorderBrush" Value="#3A3C40" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
         </Style>
 
         <Style Selector="Button.secondary:pointerover">
-            <Setter Property="Background" Value="#202430" />
-            <Setter Property="BorderBrush" Value="#3C4150" />
+            <Setter Property="Background" Value="#202124" />
+            <Setter Property="BorderBrush" Value="#505257" />
         </Style>
 
         <Style Selector="Button.icon">
@@ -72,132 +112,330 @@
             <Setter Property="MinHeight" Value="40" />
             <Setter Property="MaxWidth" Value="40" />
             <Setter Property="MaxHeight" Value="40" />
-            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="CornerRadius" Value="5" />
             <Setter Property="Padding" Value="0" />
-            <Setter Property="Background" Value="#191C25" />
-            <Setter Property="Foreground" Value="#C7CAD1" />
-            <Setter Property="BorderBrush" Value="#2A2E3A" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#B8BBC1" />
+            <Setter Property="BorderBrush" Value="#35373B" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="FontSize" Value="20" />
         </Style>
 
         <Style Selector="Button.icon:pointerover">
-            <Setter Property="Background" Value="#242834" />
+            <Setter Property="Background" Value="#242528" />
             <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <Style Selector="ToggleButton.selection">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Width" Value="20" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="MinWidth" Value="20" />
+            <Setter Property="MinHeight" Value="20" />
+            <Setter Property="MaxWidth" Value="20" />
+            <Setter Property="MaxHeight" Value="20" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Theme" Value="{StaticResource SelectionToggleTheme}" />
+            <Setter Property="Background" Value="#24262A" />
+            <Setter Property="BorderBrush" Value="#55585F" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="Transparent" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style Selector="ToggleButton.selection:pointerover">
+            <Setter Property="Background" Value="#2B2D31" />
+            <Setter Property="BorderBrush" Value="#74777E" />
+        </Style>
+
+        <Style Selector="ToggleButton.selection:checked">
+            <Setter Property="Background" Value="#E5E7EB" />
+            <Setter Property="BorderBrush" Value="#E5E7EB" />
+            <Setter Property="Foreground" Value="#17181A" />
+        </Style>
+
+        <Style Selector="ToggleButton.selection:checked:pointerover">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="#FFFFFF" />
+        </Style>
+
+        <Style Selector="ToggleButton.disclosure">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="MinWidth" Value="30" />
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="MaxWidth" Value="30" />
+            <Setter Property="MaxHeight" Value="30" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Theme" Value="{StaticResource DisclosureToggleTheme}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="#8F9298" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Content" Value="▸" />
+        </Style>
+
+        <Style Selector="ToggleButton.disclosure:pointerover">
+            <Setter Property="Background" Value="#2B2D31" />
+            <Setter Property="Foreground" Value="#E0E1E3" />
+        </Style>
+
+        <Style Selector="ToggleButton.disclosure:checked">
+            <Setter Property="Content" Value="▾" />
         </Style>
     </Window.Styles>
 
-    <Grid RowDefinitions="Auto,*,Auto">
+    <Grid>
+    <Grid x:Name="MainPage" RowDefinitions="Auto,*,Auto">
         <Border Grid.Row="0"
-                Padding="28,22"
-                Background="#12141B"
-                BorderBrush="#242731"
+                Padding="24,18"
+                Background="#191A1D"
+                BorderBrush="#303237"
                 BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="*,Auto">
-                <StackPanel
-                            VerticalAlignment="Center"
-                            Spacing="1">
-                    <TextBlock Text="MD2Anki"
-                               Foreground="#F4F4F6"
-                               FontSize="18"
-                               FontWeight="SemiBold" />
-                    <TextBlock Text="Obsidian flashcard sync"
-                               Foreground="#858A98"
-                               FontSize="12" />
-                </StackPanel>
+                <Image Source="/Assets/Obsidian2Anki_logo.png"
+                       Width="96"
+                       Height="38"
+                       Stretch="Uniform"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center" />
 
                 <Button Grid.Column="1"
                         Classes="icon"
                         Content="⚙"
-                        ToolTip.Tip="Settings" />
+                        ToolTip.Tip="Settings"
+                        Click="OpenSettings_Click" />
             </Grid>
         </Border>
 
         <ScrollViewer Grid.Row="1"
                       HorizontalScrollBarVisibility="Disabled">
-            <StackPanel Margin="38,36,38,30"
-                        MaxWidth="720"
+            <StackPanel Margin="32,30,32,26"
+                        MaxWidth="640"
                         HorizontalAlignment="Stretch"
-                        Spacing="24">
-                <Border Padding="22"
-                        Background="#171A22"
-                        BorderBrush="#292D38"
+                        Spacing="22">
+                <Border Padding="18"
+                        Background="#1B1C1F"
+                        BorderBrush="#34363A"
                         BorderThickness="1"
-                        CornerRadius="14">
-                    <StackPanel Spacing="18">
+                        CornerRadius="6">
+                    <StackPanel Spacing="16">
                         <Grid ColumnDefinitions="Auto,*,Auto">
-                            <Border Width="12"
-                                    Height="12"
-                                    Background="#4ADE80"
-                                    CornerRadius="6"
+                            <Border Width="8"
+                                    Height="8"
+                                    Background="#7FA68A"
+                                    CornerRadius="4"
                                     VerticalAlignment="Center" />
-                            <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="2">
-                                <TextBlock Text="Systems connected"
-                                           Foreground="#ECEDEF"
-                                           FontSize="15"
+                            <TextBlock Grid.Column="1"
+                                           Margin="10,0,0,0"
+                                           Text="Connections"
+                                           Foreground="#E4E5E7"
+                                           FontSize="14"
                                            FontWeight="SemiBold" />
-                                <TextBlock Text="Obsidian and Anki are available"
-                                           Foreground="#858A98"
-                                           FontSize="12" />
-                            </StackPanel>
                             <TextBlock Grid.Column="2"
-                                       Text="READY"
-                                       Foreground="#69E599"
-                                       FontSize="11"
-                                       FontWeight="Bold"
+                                       Text="Available"
+                                       Foreground="#9A9DA3"
+                                       FontSize="12"
                                        VerticalAlignment="Center" />
                         </Grid>
 
-                        <Border Height="1" Background="#292D38" />
+                        <Border Height="1" Background="#303236" />
 
                         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
                             <TextBlock Text="Obsidian vault"
-                                       Foreground="#A9ADB7"
+                                       Foreground="#A7A9AE"
                                        FontSize="13" />
                             <TextBlock Grid.Column="1"
                                        Text="Connected"
-                                       Foreground="#E3E4E8"
+                                       Foreground="#D8D9DC"
                                        FontSize="13" />
                             <TextBlock Grid.Row="1"
                                        Margin="0,11,0,0"
                                        Text="AnkiConnect"
-                                       Foreground="#A9ADB7"
+                                       Foreground="#A7A9AE"
                                        FontSize="13" />
                             <TextBlock Grid.Row="1"
                                        Grid.Column="1"
                                        Margin="0,11,0,0"
                                        Text="Connected"
-                                       Foreground="#E3E4E8"
+                                       Foreground="#D8D9DC"
                                        FontSize="13" />
                         </Grid>
                     </StackPanel>
                 </Border>
 
-                <StackPanel Spacing="11">
-                    <Button Classes="primary" Content="Review and sync" />
-                    <Button Classes="secondary" Content="Quick sync" />
+                <StackPanel Spacing="10">
+                    <Button Classes="primary"
+                            Content="Review and sync"
+                            Command="{Binding LoadPlanCommand}"
+                            IsEnabled="{Binding IsNotBusy}" />
+                    <Button Classes="secondary"
+                            Content="Quick sync"
+                            Command="{Binding QuickSyncCommand}"
+                            IsEnabled="{Binding IsNotBusy}" />
                     <TextBlock Text="Quick sync applies changes without showing a preview."
-                               Foreground="#707582"
+                               Foreground="#85878C"
                                FontSize="11"
                                HorizontalAlignment="Center" />
                 </StackPanel>
+
+                <TextBlock Text="{Binding StatusMessage}"
+                           IsVisible="{Binding HasStatusMessage}"
+                           Foreground="#A7A9AE"
+                           FontSize="12"
+                           TextWrapping="Wrap" />
+
+                <Border IsVisible="{Binding IsReviewVisible}"
+                        Background="#191A1D"
+                        BorderBrush="#34363A"
+                        BorderThickness="1"
+                        CornerRadius="6">
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto" Margin="18,16">
+                            <StackPanel Spacing="3">
+                                <TextBlock Text="Review changes"
+                                           Foreground="#F0F1F2"
+                                           FontSize="15"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="Uncheck anything you don't want to add."
+                                           Foreground="#85878C"
+                                           FontSize="11" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding Decks.Count, StringFormat='{}{0} decks'}"
+                                       Foreground="#9A9DA3"
+                                       FontSize="12"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Border Height="1" Background="#303236" />
+
+                        <ItemsControl Margin="12,12,12,2"
+                                      ItemsSource="{Binding Decks}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:DeckReviewViewModel">
+                                    <Border Margin="0,0,0,10"
+                                            Background="#202124"
+                                            BorderBrush="#383A3F"
+                                            BorderThickness="1"
+                                            CornerRadius="5"
+                                            ClipToBounds="True">
+                                        <StackPanel>
+                                            <Grid ColumnDefinitions="Auto,*,Auto"
+                                                  Margin="14,11">
+                                                <ToggleButton Classes="selection"
+                                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                              ToolTip.Tip="Include this deck and all of its cards" />
+                                                <StackPanel Grid.Column="1"
+                                                            Margin="11,0,0,0"
+                                                            Spacing="2"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Name}"
+                                                               Foreground="#ECEDEF"
+                                                               FontSize="13"
+                                                               FontWeight="SemiBold" />
+                                                    <TextBlock Text="{Binding Subtitle}"
+                                                               Foreground="#85878C"
+                                                               FontSize="10" />
+                                                </StackPanel>
+                                                <ToggleButton Grid.Column="2"
+                                                              Classes="disclosure"
+                                                              IsChecked="{Binding IsExpanded, Mode=TwoWay}"
+                                                              ToolTip.Tip="Expand or collapse deck" />
+                                            </Grid>
+
+                                            <Border Padding="12"
+                                                    IsVisible="{Binding IsExpanded}"
+                                                    Background="#18191B"
+                                                    BorderBrush="#34363A"
+                                                    BorderThickness="0,1,0,0">
+                                                <StackPanel>
+                                                    <ItemsControl ItemsSource="{Binding Cards}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate x:DataType="vm:CardReviewViewModel">
+                                                                <Border Margin="0,0,0,8"
+                                                                        Padding="12"
+                                                                        Background="#1E1F22"
+                                                                        BorderBrush="#303237"
+                                                                        BorderThickness="1"
+                                                                        CornerRadius="4">
+                                                                    <Grid ColumnDefinitions="Auto,*">
+                                                                        <ToggleButton Classes="selection"
+                                                                                      IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                                                      Margin="0,2,11,0"
+                                                                                      VerticalAlignment="Top"
+                                                                                      ToolTip.Tip="Include this card" />
+                                                                        <StackPanel Grid.Column="1" Spacing="7">
+                                                                            <StackPanel Spacing="2">
+                                                                                <TextBlock Text="FRONT"
+                                                                                           Foreground="#6F7278"
+                                                                                           FontSize="9"
+                                                                                           FontWeight="SemiBold" />
+                                                                                <TextBlock Text="{Binding Front}"
+                                                                                           Foreground="#E2E3E5"
+                                                                                           FontSize="12"
+                                                                                           TextWrapping="Wrap" />
+                                                                            </StackPanel>
+                                                                            <Border Height="1" Background="#2B2D31" />
+                                                                            <StackPanel Spacing="2">
+                                                                                <TextBlock Text="BACK"
+                                                                                           Foreground="#6F7278"
+                                                                                           FontSize="9"
+                                                                                           FontWeight="SemiBold" />
+                                                                                <TextBlock Text="{Binding Back}"
+                                                                                           Foreground="#B9BBC0"
+                                                                                           FontSize="12"
+                                                                                           TextWrapping="Wrap" />
+                                                                            </StackPanel>
+                                                                        </StackPanel>
+                                                                    </Grid>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+
+                                                    <TextBlock IsVisible="{Binding HasNoCards}"
+                                                               Margin="2,2,2,4"
+                                                               Text="This deck has no new cards."
+                                                               Foreground="#74777D"
+                                                               FontSize="11" />
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Border Padding="12,2,12,12">
+                            <Button Classes="primary"
+                                    Content="Execute selected changes"
+                                    Command="{Binding ExecutePlanCommand}"
+                                    IsEnabled="{Binding IsNotBusy}" />
+                        </Border>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ScrollViewer>
 
         <Border Grid.Row="2"
-                Padding="28,16"
-                Background="#12141B"
-                BorderBrush="#242731"
+                Padding="24,13"
+                Background="#191A1D"
+                BorderBrush="#303237"
                 BorderThickness="0,1,0,0">
             <Grid ColumnDefinitions="*,Auto">
-                <TextBlock Text="Last sync: Not yet synced"
-                           Foreground="#777C89"
-                           FontSize="12" />
                 <TextBlock Grid.Column="1"
                            Text="v0.1"
-                           Foreground="#5F6470"
+                           Foreground="#73767C"
                            FontSize="12" />
             </Grid>
         </Border>
+    </Grid>
+
+    <views:SettingsView x:Name="SettingsPage"
+                        IsVisible="False" />
     </Grid>
 </Window>

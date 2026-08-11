@@ -1,0 +1,202 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="540"
+             d:DesignHeight="640"
+             x:Class="ui.Views.SettingsView"
+             Background="#151618"
+             FontFamily="Inter">
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.setting">
+            <Setter Property="MinHeight" Value="40" />
+            <Setter Property="Padding" Value="11,8" />
+            <Setter Property="Background" Value="#1D1F22" />
+            <Setter Property="Foreground" Value="#E3E4E6" />
+            <Setter Property="BorderBrush" Value="#3A3C41" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+
+        <Style Selector="TextBox.setting:focus-within">
+            <Setter Property="BorderBrush" Value="#777A81" />
+        </Style>
+
+        <Style Selector="NumericUpDown.setting">
+            <Setter Property="MinHeight" Value="40" />
+            <Setter Property="Padding" Value="11,7" />
+            <Setter Property="Background" Value="#1D1F22" />
+            <Setter Property="Foreground" Value="#E3E4E6" />
+            <Setter Property="BorderBrush" Value="#3A3C41" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Padding" Value="16,0" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#E5E7EB" />
+            <Setter Property="Foreground" Value="#17181A" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#FFFFFF" />
+        </Style>
+
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#D3D5D9" />
+            <Setter Property="BorderBrush" Value="#3A3C40" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style Selector="Button.secondary:pointerover">
+            <Setter Property="Background" Value="#242528" />
+            <Setter Property="BorderBrush" Value="#505257" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <Border Grid.Row="0"
+                Padding="24,19"
+                Background="#191A1D"
+                BorderBrush="#303237"
+                BorderThickness="0,0,0,1">
+            <StackPanel Spacing="3">
+                <TextBlock Text="Settings"
+                           Foreground="#F0F1F2"
+                           FontSize="18"
+                           FontWeight="SemiBold" />
+                <TextBlock Text="Configure your vault and AnkiConnect connection."
+                           Foreground="#85878C"
+                           FontSize="11" />
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="28,24"
+                        Spacing="24">
+                <StackPanel Spacing="14">
+                    <StackPanel Spacing="3">
+                        <TextBlock Text="Obsidian"
+                                   Foreground="#E8E9EB"
+                                   FontSize="14"
+                                   FontWeight="SemiBold" />
+                        <TextBlock Text="Choose the vault folder and card extraction pattern."
+                                   Foreground="#7F8288"
+                                   FontSize="11" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Vault root"
+                                   Foreground="#B9BBC0"
+                                   FontSize="12" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBox x:Name="RootPathTextBox"
+                                     Classes="setting"
+                                     IsReadOnly="True"
+                                     PlaceholderText="Select an Obsidian vault folder" />
+                            <Button Grid.Column="1"
+                                    Margin="8,0,0,0"
+                                    Classes="secondary"
+                                    Content="Browse…"
+                                    Click="BrowseRoot_Click" />
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Card pattern"
+                                   Foreground="#B9BBC0"
+                                   FontSize="12" />
+                        <TextBox x:Name="PatternTextBox"
+                                 Classes="setting"
+                                 FontFamily="monospace"
+                                 PlaceholderText="Regular expression with front and back capture groups" />
+                        <TextBlock Text="The first capture group becomes the front; the second becomes the back."
+                                   Foreground="#696C72"
+                                   FontSize="10" />
+                    </StackPanel>
+                </StackPanel>
+
+                <Border Height="1" Background="#303236" />
+
+                <StackPanel Spacing="14">
+                    <StackPanel Spacing="3">
+                        <TextBlock Text="AnkiConnect"
+                                   Foreground="#E8E9EB"
+                                   FontSize="14"
+                                   FontWeight="SemiBold" />
+                        <TextBlock Text="Set the API version and address used by the backend."
+                                   Foreground="#7F8288"
+                                   FontSize="11" />
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="130,*">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Version"
+                                       Foreground="#B9BBC0"
+                                       FontSize="12" />
+                            <NumericUpDown x:Name="AnkiVersionInput"
+                                           Classes="setting"
+                                           Minimum="1"
+                                           Maximum="100"
+                                           Increment="1"
+                                           FormatString="0" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1"
+                                    Margin="14,0,0,0"
+                                    Spacing="6">
+                            <TextBlock Text="URL"
+                                       Foreground="#B9BBC0"
+                                       FontSize="12" />
+                            <TextBox x:Name="AnkiUrlTextBox"
+                                     Classes="setting"
+                                     PlaceholderText="http://localhost:8765" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <TextBlock x:Name="StatusText"
+                           IsVisible="False"
+                           Foreground="#A7A9AE"
+                           FontSize="11"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2"
+                Padding="20,14"
+                Background="#191A1D"
+                BorderBrush="#303237"
+                BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <Button Grid.Column="1"
+                        Classes="secondary"
+                        Content="Cancel"
+                        Click="Cancel_Click" />
+                <Button x:Name="SaveButton"
+                        Grid.Column="2"
+                        Margin="8,0,0,0"
+                        Classes="primary"
+                        Content="Save changes"
+                        Click="Save_Click" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
