@@ -56,13 +56,11 @@ def create_plan(anki_state, obsidian_state):
 
 def comparing_decks(anki_state, obsidian_state):
     new_decks = [deck for deck in obsidian_state if deck not in anki_state]
-    deleted_decks = [deck for deck in anki_state if deck not in obsidian_state]
-    deck_plan = DeckPlan(new_decks, deleted_decks)
+    deck_plan = DeckPlan(new_decks)
     return deck_plan
 
 def comparing_cards(anki_state,obsidian_state):
     new_cards = {}
-    deleted_cards = {}
     
     for obsidian_deck in obsidian_state:
         if anki_state.get(obsidian_deck):
@@ -72,10 +70,8 @@ def comparing_cards(anki_state,obsidian_state):
         obsidian_cards = obsidian_state[obsidian_deck]
 
         new_cards[obsidian_deck] = [card for card in obsidian_cards if card not in anki_cards]
-        deleted_cards[obsidian_deck] = [card for card in anki_cards if card not in obsidian_cards]
 
-    card_plan = CardPlan(new_cards, deleted_cards)
+    card_plan = CardPlan(new_cards)
     return card_plan
 
-def execute_plan(plan, anki_client):
-    plan.execute(anki_client)
+

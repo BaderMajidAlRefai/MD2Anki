@@ -53,3 +53,20 @@ class AnkiConnectClient:
             }
         }
         return self.send_request("addNote", {"note": note})
+
+    def add_notes(self, to_be_added):
+        notes = []
+        for deck_name, cards in to_be_added.items():
+            for card in cards:
+                front, back = card
+                notes.append({
+                        "deckName": deck_name,
+                        "modelName":"Basic",
+                            "fields":{
+                            "Front":front,
+                            "Back":back
+                            }
+                    }
+                )               
+
+        return self.send_request("addNotes", {"notes": notes})
