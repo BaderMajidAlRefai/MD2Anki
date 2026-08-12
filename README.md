@@ -65,7 +65,8 @@ Coming soon
 Whenever I tried looking up how to make a good project that would be educational and worth while the common advice 
 I would see listed is that you should make something you 
 - Want to make 
-- Would use 
+- Would use
+
 I kept feeding my class notes to chatgpt to turn them into a csv that I could import into anki and that was an annoying process as after a long day at university the last thing I want to do is cross reference between anki and obsidian to see what notes I've already imported or not. That's when it hit me that I could automate this whole process and have a fun little project alongside it. 
 
 There have been a lot of firsts for me in this project to be honest its my first real full stack application. For the sake of honesty though I do have to admit that I did vibe code the entire front end, but the backend is all me.I kinda rushed into using Avalonia UI thinking like ok fine I know basic C# so I should be able to tackle a framework in a language I barely understand. This turned out to be a very bad idea so I ended up vibe coding the front end as the main point of interest/learning for me in this project was with the backend. In future I will make a project where the front end came all out of my brain but for now I wanted to ship this project and get it complete (with complete meaning that I can use it for my original context.)
