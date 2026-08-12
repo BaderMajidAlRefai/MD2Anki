@@ -1,4 +1,26 @@
 test.md
-__pycache__
 cards.csv
-.vscode
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# PyInstaller build output
+/build/
+/dist/
+
+# .NET / Avalonia build output
+**/bin/
+**/obj/
+
+# Local development tools
+.vscode/
+.idea/
+.agents/
+.codex/
+
+# Operating systems
+.DS_Store
+Thumbs.db
