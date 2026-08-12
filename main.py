@@ -1,4 +1,4 @@
-import json, copy
+import json, copy, argparse, uvicorn
 from fastapi import FastAPI
 from pathlib import Path
 from platformdirs import user_config_dir
@@ -28,7 +28,7 @@ DEFAULT_SETTINGS = {
     },
     "obsidian": {
         "obsidian_root": "",
-        "notes_pattern": ""
+        "notes_pattern": r"\s?-?\s?\*\*(.*?):\*\*\s(\S.*)"
     }
 }
 
@@ -117,3 +117,30 @@ def change_anki_url(update: anki_url_update):
 @app.get("/settings")
 def get_settings():
     return settings
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+@app.get("/ankiclient/check")
+def anki_check():
+    connection = anki_client.check_connection()
+    if connection:
+        return True
+    else:
+        return False
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--port", type=int, required=True)
+    args = parser.parse_args()
+
+    uvicorn.run(
+        app,
+        host="127.0.0.1",
+        port=args.port
+    )
+
+
+if __name__ == "__main__":
+    main()

@@ -2,30 +2,28 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using System;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 using ui.Models;
+using ui.Services;
 
 namespace ui.Views;
 
 public partial class SettingsView : UserControl
 {
-    private const string BackendUrl = "http://127.0.0.1:8000";
-    private static readonly HttpClient HttpClient = new();
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
-    };
-
+    private ApiClient? _apiClient;
     private ApplicationSettings? _originalSettings;
 
     public event EventHandler? CloseRequested;
+    public event EventHandler? SettingsSaved;
 
     public SettingsView()
     {
         InitializeComponent();
+    }
+
+    public void Initialize(ApiClient apiClient)
+    {
+        _apiClient = apiClient;
     }
 
     public async Task LoadSettingsAsync()
@@ -35,10 +33,8 @@ public partial class SettingsView : UserControl
 
         try
         {
-            _originalSettings = await HttpClient.GetFromJsonAsync<ApplicationSettings>(
-                $"{BackendUrl}/settings",
-                JsonOptions)
-                ?? throw new InvalidOperationException("The backend returned empty settings.");
+            var apiClient = GetApiClient();
+            _originalSettings = await apiClient.GetFromJsonAsync<ApplicationSettings>("settings");
 
             RootPathTextBox.Text = _originalSettings.Obsidian.ObsidianRoot;
             PatternTextBox.Text = _originalSettings.Obsidian.NotesPattern;
@@ -148,6 +144,7 @@ public partial class SettingsView : UserControl
             }
 
             SetStatus("Settings saved.", false);
+            SettingsSaved?.Invoke(this, EventArgs.Empty);
             CloseRequested?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception exception)
@@ -160,19 +157,9 @@ public partial class SettingsView : UserControl
         }
     }
 
-    private static async Task PostSettingAsync<T>(string route, T payload)
+    private async Task PostSettingAsync<T>(string route, T payload)
     {
-        using var response = await HttpClient.PostAsJsonAsync(
-            $"{BackendUrl}{route}",
-            payload,
-            JsonOptions);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var responseBody = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException(
-                $"{route} returned {(int)response.StatusCode}: {responseBody}");
-        }
+        await GetApiClient().PostAsJsonAsync(route, payload);
     }
 
     private void Cancel_Click(object? sender, RoutedEventArgs eventArgs)
@@ -190,5 +177,11 @@ public partial class SettingsView : UserControl
         StatusText.Text = message;
         StatusText.Foreground = isError ? Avalonia.Media.Brushes.IndianRed : Avalonia.Media.Brushes.DarkGray;
         StatusText.IsVisible = true;
+    }
+
+    private ApiClient GetApiClient()
+    {
+        return _apiClient
+            ?? throw new InvalidOperationException("The local backend API has not been initialized.");
     }
 }

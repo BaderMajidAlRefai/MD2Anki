@@ -8,7 +8,17 @@
 
   <ItemGroup>
     <Folder Include="Models\" />
+    <Folder Include="Services\" />
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('../dist/Obsidian2Anki.Backend')">
+    <Content Include="../dist/Obsidian2Anki.Backend/**">
+      <Link>backend/%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <TargetPath>backend/%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

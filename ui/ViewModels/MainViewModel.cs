@@ -3,30 +3,33 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 using ui.Models;
+using ui.Services;
 
 namespace ui.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
-    private const string PlanUrl = "http://127.0.0.1:8000/plan";
-    private const string ExecutePlanUrl = "http://127.0.0.1:8000/plan/execute";
-    private static readonly HttpClient HttpClient = new();
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
-    };
-
+    private readonly ApiClient _apiClient;
     private Plan? _plan;
+    private bool _hasConnectionResults;
+    private bool _hasObsidianRoot;
+    private bool _isAnkiConnected;
+    private bool _isBackendReady;
     private bool _isBusy;
+    private bool _isCheckingConnections;
     private bool _isReviewVisible;
+    private string _backendStatusLabel = "Starting";
     private string _statusMessage = string.Empty;
 
     public ObservableCollection<DeckReviewViewModel> Decks { get; } = [];
+
+    public MainViewModel(ApiClient apiClient)
+    {
+        _apiClient = apiClient;
+        StatusMessage = "Starting local backend…";
+    }
 
     public Plan? Plan
     {
@@ -46,7 +49,44 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    public bool IsNotBusy => !IsBusy;
+    public bool IsBackendReady
+    {
+        get => _isBackendReady;
+        private set
+        {
+            if (SetProperty(ref _isBackendReady, value))
+            {
+                OnPropertyChanged(nameof(IsNotBusy));
+            }
+        }
+    }
+
+    public bool IsNotBusy => !IsBusy && IsBackendReady && AreConnectionsReady;
+
+    public bool HasObsidianRoot => _hasObsidianRoot;
+
+    public bool IsObsidianRootMissing => _hasConnectionResults && !HasObsidianRoot;
+
+    public bool IsAnkiConnected => _isAnkiConnected;
+
+    public bool IsAnkiDisconnected => _hasConnectionResults && !IsAnkiConnected;
+
+    public bool IsConnectionStatusNeutral => !_hasConnectionResults;
+
+    public bool AreConnectionsReady =>
+        _hasConnectionResults && HasObsidianRoot && IsAnkiConnected;
+
+    public bool DoConnectionsNeedAttention =>
+        _hasConnectionResults && !AreConnectionsReady;
+
+    public string NeutralConnectionStatusLabel =>
+        _isCheckingConnections ? "Checking…" : "Unavailable";
+
+    public string BackendStatusLabel
+    {
+        get => _backendStatusLabel;
+        private set => SetProperty(ref _backendStatusLabel, value);
+    }
 
     public bool IsReviewVisible
     {
@@ -68,10 +108,64 @@ public partial class MainViewModel : ViewModelBase
 
     public bool HasStatusMessage => !string.IsNullOrWhiteSpace(StatusMessage);
 
+    public void SetBackendReady()
+    {
+        IsBackendReady = true;
+        BackendStatusLabel = "Checking";
+        StatusMessage = string.Empty;
+        _ = RefreshConnectionStatusAsync();
+    }
+
+    public void SetBackendError(string message)
+    {
+        IsBackendReady = false;
+        IsBusy = false;
+        BackendStatusLabel = "Unavailable";
+        StatusMessage = message;
+        SetConnectionUnavailable();
+    }
+
+    public async Task RefreshConnectionStatusAsync()
+    {
+        if (!IsBackendReady || _isCheckingConnections)
+        {
+            return;
+        }
+
+        SetConnectionChecking();
+
+        try
+        {
+            var settingsTask = _apiClient.GetFromJsonAsync<ApplicationSettings>("settings");
+            var ankiCheckTask = _apiClient.GetFromJsonAsync<bool>("ankiclient/check");
+
+            await Task.WhenAll(settingsTask, ankiCheckTask);
+
+            var applicationSettings = await settingsTask;
+            var hasObsidianRoot = !string.IsNullOrWhiteSpace(
+                applicationSettings.Obsidian.ObsidianRoot);
+            var isAnkiConnected = await ankiCheckTask;
+
+            SetConnectionResults(hasObsidianRoot, isAnkiConnected);
+        }
+        catch (Exception exception)
+        {
+            SetConnectionUnavailable();
+            BackendStatusLabel = "Unavailable";
+            StatusMessage = $"Could not check connections: {exception.Message}";
+        }
+    }
+
+    [RelayCommand]
+    private async Task CheckConnectionsAsync()
+    {
+        await RefreshConnectionStatusAsync();
+    }
+
     [RelayCommand]
     private async Task LoadPlanAsync()
     {
-        if (IsBusy)
+        if (!IsNotBusy)
         {
             return;
         }
@@ -81,12 +175,7 @@ public partial class MainViewModel : ViewModelBase
 
         try
         {
-            using var response = await HttpClient.GetAsync(PlanUrl);
-            response.EnsureSuccessStatusCode();
-
-            var json = await response.Content.ReadAsStringAsync();
-            Plan = JsonSerializer.Deserialize<Plan>(json, JsonOptions)
-                ?? throw new InvalidOperationException("The backend returned an empty plan.");
+            Plan = await _apiClient.GetFromJsonAsync<Plan>("plan");
 
             PopulateDecks(Plan);
             IsReviewVisible = Decks.Count > 0;
@@ -107,7 +196,7 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     private async Task QuickSyncAsync()
     {
-        if (IsBusy)
+        if (!IsNotBusy)
         {
             return;
         }
@@ -117,9 +206,7 @@ public partial class MainViewModel : ViewModelBase
 
         try
         {
-            using var request = new HttpRequestMessage(HttpMethod.Post, ExecutePlanUrl);
-            using var response = await HttpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            await _apiClient.PostAsync("plan/execute");
 
             IsReviewVisible = false;
             Decks.Clear();
@@ -139,7 +226,7 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     private async Task ExecutePlanAsync()
     {
-        if (IsBusy || !IsReviewVisible)
+        if (!IsNotBusy || !IsReviewVisible)
         {
             return;
         }
@@ -150,11 +237,7 @@ public partial class MainViewModel : ViewModelBase
         try
         {
             var adjustedPlan = BuildAdjustedPlan();
-            using var response = await HttpClient.PostAsJsonAsync(
-                ExecutePlanUrl,
-                adjustedPlan,
-                JsonOptions);
-            response.EnsureSuccessStatusCode();
+            await _apiClient.PostAsJsonAsync("plan/execute", adjustedPlan);
 
             IsReviewVisible = false;
             Decks.Clear();
@@ -223,5 +306,47 @@ public partial class MainViewModel : ViewModelBase
             DeckPlan = new DeckPlan { ToBeAdded = decksToAdd },
             CardPlan = new CardPlan { ToBeAdded = cardsToAdd },
         };
+    }
+
+    private void SetConnectionChecking()
+    {
+        _isCheckingConnections = true;
+        _hasConnectionResults = false;
+        _hasObsidianRoot = false;
+        _isAnkiConnected = false;
+        BackendStatusLabel = "Checking";
+        NotifyConnectionStateChanged();
+    }
+
+    private void SetConnectionResults(bool hasObsidianRoot, bool isAnkiConnected)
+    {
+        _isCheckingConnections = false;
+        _hasConnectionResults = true;
+        _hasObsidianRoot = hasObsidianRoot;
+        _isAnkiConnected = isAnkiConnected;
+        BackendStatusLabel = AreConnectionsReady ? "Ready" : "Action needed";
+        NotifyConnectionStateChanged();
+    }
+
+    private void SetConnectionUnavailable()
+    {
+        _isCheckingConnections = false;
+        _hasConnectionResults = false;
+        _hasObsidianRoot = false;
+        _isAnkiConnected = false;
+        NotifyConnectionStateChanged();
+    }
+
+    private void NotifyConnectionStateChanged()
+    {
+        OnPropertyChanged(nameof(HasObsidianRoot));
+        OnPropertyChanged(nameof(IsObsidianRootMissing));
+        OnPropertyChanged(nameof(IsAnkiConnected));
+        OnPropertyChanged(nameof(IsAnkiDisconnected));
+        OnPropertyChanged(nameof(IsConnectionStatusNeutral));
+        OnPropertyChanged(nameof(AreConnectionsReady));
+        OnPropertyChanged(nameof(DoConnectionsNeedAttention));
+        OnPropertyChanged(nameof(NeutralConnectionStatusLabel));
+        OnPropertyChanged(nameof(IsNotBusy));
     }
 }
