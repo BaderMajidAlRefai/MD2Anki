@@ -55,7 +55,29 @@ Coming soon
 
 ### Windows 
 
-Coming soon 
+Download `MD2Anki-win-x64.zip` from the Releases page.
+
+- Extract the folder anywhere you like.
+- Run `MD2Anki.exe`.
+
+The build is self-contained, so no .NET runtime or Python install is required. The
+backend ships alongside the app in the `backend` folder and is started
+automatically, so keep the folder contents together.
+
+## Building from source
+
+### Windows
+
+Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download) and Python 3.12+.
+
+```PowerShell
+.\build-windows.ps1
+```
+
+This creates the virtual environment, packages the FastAPI backend with
+PyInstaller, then publishes the Avalonia front end with the backend bundled into
+`dist\MD2Anki-win-x64`. Pass `-SkipBackend` to republish only the front end when
+the backend has not changed.
 
 ## Tech Stack 
 - FastApi (Python) (Backend)
