@@ -1,4 +1,4 @@
-# MD2Anki
+# Obsidian2Anki
 
 An app that turns Obsidian notes into Anki flashcards.
 
